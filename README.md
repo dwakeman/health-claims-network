@@ -1,1 +1,1 @@
-# health-claims-network
+# org.acme.claim.lifecycle

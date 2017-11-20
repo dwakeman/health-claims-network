@@ -1,0 +1,29 @@
+{
+  "name": "health-claims-network",
+  "version": "0.0.1",
+  "description": "Demo health claims processing network",
+  "scripts": {
+    "prepublish": "mkdirp ./dist && composer archive create  --sourceType dir --sourceName . -a ./dist/vehicle-lifecycle-network.bna",
+    "pretest": "npm run lint",
+    "lint": "eslint .",
+    "postlint": "npm run licchk",
+    "licchk": "license-check",
+    "postlicchk": "npm run doc",
+    "doc": "jsdoc --pedantic --recurse -c jsdoc.json",
+    "test": "mocha -t 0 --recursive"
+  },
+  "author": "Dave Wakeman",
+  "email": "dwakeman@us.ibm.com",
+  "repository": "https://github.com/dwakeman/health-claims-network",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "composer-admin": "latest",
+    "composer-client": "latest",
+    "composer-connector-embedded": "latest",
+    "chai": "latest",
+    "eslint": "latest",
+    "istanbul": "latest",
+    "mkdirp": "latest",
+    "mocha": "latest"
+  }
+}
