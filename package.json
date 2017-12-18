@@ -1,9 +1,9 @@
 {
   "name": "health-claims-network",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "description": "Demo health claims processing network",
   "scripts": {
-    "prepublish": "mkdirp ./dist && composer archive create  --sourceType dir --sourceName . -a ./dist/vehicle-lifecycle-network.bna",
+    "prepublish": "mkdirp ./dist && composer archive create  --sourceType dir --sourceName . -a ./dist/health-claims-network.bna",
     "pretest": "npm run lint",
     "lint": "eslint .",
     "postlint": "npm run licchk",

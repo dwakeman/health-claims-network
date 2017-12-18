@@ -4,18 +4,126 @@
 
 namespace org.acme.claim.lifecycle
 import composer.base.Person
+import composer.business.Business
 
+enum ClaimStatus {
+  o ACTIVE
+  o CANCELLED
+  o DRAFT
+  o ENTERED_IN_ERROR
+}
+
+enum ClaimUse {
+  o COMPLETE
+  o PROPOSED
+  o EXPLORATORY
+  o OTHER
+}
+
+abstract participant PlanCompany {
+  o String companyName
+
+}
  
+participant HomePlan identified by companyId extends PlanCompany {
+  o String companyId
+}
+
+participant HostPlan identified by companyId extends PlanCompany {
+  o String companyId
+}
+
 participant User identified by email {
   o String email
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  o String value
+participant Provider identified by providerId extends Business {
+  o String providerId
 }
 
-transaction ChangeAssetValue {
-  o String newValue
-  --> Asset relatedAsset
+concept Coding {
+  o String system default="http://hl7.org/fhir/sid/icd-10" // for ICD-10 use http://hl7.org/fhir/sid/icd-10
+  o String version default="ICD-10"
+  o String code
+  o String display
+  o Boolean userSelected
+}
+
+concept CodeableConcept {
+  o Coding Coding
+  o String text
+}
+
+concept Procedure {
+  o Integer sequence
+  o DateTime date
+  o CodeableConcept procedureCodeableConcept // ICD-10 codes
+  o String notes optional
+}
+
+concept Diagnosis {
+  o Integer sequence
+  o CodeableConcept diagnosisCodeableConcept // ICD-10 codes
+  o String type // e.g. admitting, primary, secondary, discharge
+  o String packageCode
+}
+
+concept Item {
+  o Integer sequence
+  o Integer[] diagnosisLinkId
+  o Integer[] procedureLinkId
+  o DateTime serviceDate
+  o Integer quantity
+  o Double unitPrice
+}
+
+
+// https://www.hl7.org/fhir/claim.html
+asset Claim identified by identifier {
+  o String identifier
+  o String type
+  o ClaimStatus status
+  o ClaimUse use
+  o String patientId
+  o String memberId
+  o String relationshipToMember
+  o String providerId
+  o DateTime created
+  o Procedure[] procedure
+  o Diagnosis[] diagnosis
+  o Item[] item
+  o Double total
+}
+
+transaction SubmitClaim {
+  o String identifier
+  o String type
+  o ClaimStatus status
+  o ClaimUse use
+  o String patientId
+  o String memberId
+  o String relationshipToMember
+  o String providerId
+  o DateTime created
+  o Diagnosis[] diagnosis
+  o Procedure[] procedure
+  o Item[] item  
+  o Double total
+
+}
+
+event ClaimSubmitted {
+  o String identifier
+  o String type
+  o ClaimStatus status
+  o ClaimUse use
+  o String patientId
+  o String memberId
+  o String relationshipToMember
+  o String providerId
+  o DateTime created
+  o Diagnosis[] diagnosis
+  o Procedure[] procedure
+  o Item[] item
+  o Double total
 }
